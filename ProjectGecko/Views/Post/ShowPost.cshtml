@@ -1,0 +1,82 @@
+﻿@using ProjectGecko.Models
+@using ProjectGecko
+@model ProjectGecko.Models.Post
+
+@{
+    ViewData["Title"] = "ShowSinglePost";
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+    Account LoggedIn = Account.GetAccount(Context.Request.Cookies["LoggedUser"]);
+}
+
+<div class="showPostCenter">
+    <script src="~/Js/JQuery/jquery-3.4.1.min.js"></script>
+    <script src="~/Js/LikeButton.js"></script>
+
+    @foreach (var item in Model.ImagePaths)
+    {
+        <div class="slide">
+            <img src=@Url.Content(item) alt="Alternate Text" class="postimages singlepostimages" />
+        </div>
+    }
+
+    <div class="CenterControls">
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+
+    <img src=@Url.Content(Model.GetPostAccount().ProfPicPath) alt="Alternate Text" class="ProfilePicSmall" />
+    @{string accountPath1 = "/" + Model.GetPostAccount().AccountID + "/account";}
+    <a class="UserDetails" href=@accountPath1>
+        <h2>@Model.Title</h2>
+        <p class="ProfileName">@Model.GetPostAccount().DisplayName</p>
+        <p class="LikeCounter">Likes: @Model.Likes</p>
+        @if( LoggedIn != null )
+        {
+            if(Model.UserLikedPost(LoggedIn.AccountID))
+            {
+                <input type="image" src="~/Images/SiteGraphics/Like.png" class="LikeButton RemoveLike" onclick="RemoveLike(@Model.PostID, @LoggedIn.AccountID)"/>
+                <input type="image" src="~/Images/SiteGraphics/NoLike.png" style="display:none"  class="LikeButton AddLike" onclick="AddLike(@Model.PostID, @LoggedIn.AccountID)"/>
+            }
+            else
+            {
+                <input type="image" src="~/Images/SiteGraphics/Like.png" style="display: none" class="LikeButton RemoveLike" onclick="RemoveLike(@Model.PostID, @LoggedIn.AccountID)"/>
+                <input type="image" src="~/Images/SiteGraphics/NoLike.png" class="LikeButton AddLike" onclick="AddLike(@Model.PostID, @LoggedIn.AccountID)"/>
+            }
+        }
+    </a>
+
+</div>
+<div class="CommentSection">
+    @if (LoggedIn != null)
+    {
+        <div class="UserCommentEnter">
+            @using (Html.BeginForm("Comment", "User", FormMethod.Post))
+            {
+                <textarea type="text" name="CommentText"></textarea>
+                <input type="hidden" name="postId" value=@Model.PostID />
+                <input type="hidden" name="user" value=@LoggedIn.AccountID />
+                <input type="submit" value="Comment" />
+            }
+        </div>
+    }
+    else
+    {
+        <a class="LogInWarning" href="/LogInSignUp" >Log In to comment</a>
+    }
+    <div class="PostCommentList">
+        @foreach (Comment item in Model.Comments)
+        {
+            <div class="Comment">
+                @{ string accountPath = "/" + Account.GetAccount(item.CommentPoster).AccountID + "/account"; }
+                <a href=@accountPath>
+                    <img class="ProfilePicSmall" src=@Url.Content(Account.GetAccount(item.CommentPoster).ProfPicPath) alt="Alternate Text" />
+                </a>
+                <a class="ProfileName" href=@accountPath>
+                    <p class="ProfileName">@Account.GetAccount(item.CommentPoster).DisplayName</p>
+                </a>
+                <p class="CommentText">@item.Text</p>
+            </div>
+        }
+    </div>
+</div>
+<script src="~/Js/SlideShowController.js"></script>

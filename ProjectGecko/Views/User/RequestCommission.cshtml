@@ -1,0 +1,26 @@
+﻿@model ProjectGecko.Models.Commission
+@{
+    ViewData["Title"] = "RequestCommission";
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+}
+
+<h1>RequestCommission</h1>
+
+@using (Html.BeginForm("RequestCommission", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(false);
+
+    <input type="hidden" name="CommissioneeId" value=@ViewBag.CommissioneeId />
+
+    <input type="file" name="imagePath1" accept="image/jpg, image/jpeg, image/png" value="">
+    <input type="file" name="imagePath2" accept="image/jpg, image/jpeg, image/png" value="">
+    <input type="file" name="imagePath3" accept="image/jpg, image/jpeg, image/png" value="">
+    <input type="file" name="imagePath4" accept="image/jpg, image/jpeg, image/png" value="">
+    <input type="file" name="imagePath5" accept="image/jpg, image/jpeg, image/png" value="">
+
+    <p>Description: </p>
+    @Html.EditorFor(m => m.Description)
+    @Html.ValidationMessageFor(m => m.Description)
+    <br />
+    <input type="submit" value="Submit" />
+}

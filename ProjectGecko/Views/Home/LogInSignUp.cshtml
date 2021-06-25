@@ -1,0 +1,59 @@
+﻿@model ProjectGecko.Models.Account
+
+@{
+    ViewData["Title"] = "LogInSignUp";
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+}
+<div class="LoginFormWrapper">
+    <div class="SignUp">
+        <h2>Sign Up</h2>
+        @using (Html.BeginForm("CreateAccount", "User", FormMethod.Post, new { enctype="multipart/form-data" }))
+        {
+                <label id="ImageUploadLabel" for="ImageUploader">
+                    <img id="ImagePreviewer" src="~/Images/Users/Default/defaultprofile.png" alt="">
+                </label>
+                <p id="ImagePreviewerLabel">Choose Image</p>
+                <input type="file" name="profileImage" value="" id="ImageUploader">
+                <script src="~/Js/ImageUploadPreview.js"></script>
+
+                <p>Email:</p>
+                @Html.EditorFor(m => m.Email)
+                @Html.ValidationMessageFor(m => m.Email)
+
+                @*<p>The name to be publicly displayed</p>*@
+                <p>Display Name:</p>
+                @Html.EditorFor(m => m.DisplayName)
+                @Html.ValidationMessageFor(m => m.DisplayName)
+
+                @*<p>The name that your account is associated with</p>*@
+                <p>Username:</p>
+                @Html.EditorFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+
+                <p>Password:</p>
+                @Html.EditorFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+
+                <p>Phone Number:</p>
+                @Html.EditorFor(m => m.PhoneNumber)
+
+                <input type="submit" value="Sign Up!" />
+        }
+    </div>
+    <div class="LogIn">
+        <h2>Log In</h2>
+        @using (Html.BeginForm("LogIn", "User", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true);
+            <p>Username:</p>
+            @Html.EditorFor(m => m.UserName)
+            @Html.ValidationMessageFor(m => m.UserName)
+
+            <p>Password:</p>
+            @Html.EditorFor(m => m.Password)
+            @Html.ValidationMessageFor(m => m.Password)
+            <br />
+            <input type="submit" value="Log In" />
+        }
+    </div>
+</div>

@@ -1,0 +1,31 @@
+﻿@model ProjectGecko.Models.Account
+@{
+    ViewData["Title"] = "CreateAccount";
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+}
+
+<h1>CreateAccount</h1>
+
+@using (Html.BeginForm("CreateAccount", "User", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
+    <p>The name to be publicly displayed</p>
+    <p>Display Name: <span>@Html.EditorFor(m => m.DisplayName)</span></p>
+    <p>@Html.ValidationMessageFor(m => m.DisplayName)</p>
+
+    <p>The name that your account is associated with</p>
+    <p>Username: <span>@Html.EditorFor(m => m.UserName)</span></p>
+    <p>@Html.ValidationMessageFor(m => m.UserName)</p>
+
+    <p>Password: <span>@Html.EditorFor(m => m.Password)</span></p>
+    <p>@Html.ValidationMessageFor(m => m.Password)</p>
+
+    <p>Profile Image: <span><input type="file" required name="ProfPicPath"/></span></p>
+    <p>@Html.ValidationMessageFor(m => m.ProfPicPath)</p>
+
+    <p>Phone Number: <span>@Html.EditorFor(m => m.PhoneNumber)</span></p>
+
+    <p>Email: <span>@Html.EditorFor(m => m.Email)</span></p>
+
+    <input type="submit" />
+}
+

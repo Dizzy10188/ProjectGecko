@@ -1,0 +1,55 @@
+﻿@using ProjectGecko.Models
+@model ProjectGecko.Models.Account
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+}
+    <h1 class="pageheader">Latest Posts</h1>
+
+@if (Model != null)
+{
+    <div class="postcontainer">
+        <div class="row">
+            @foreach (Post post in ViewBag.Posts)
+            {
+                string postLink = "/" + post.PostID + "/showpost";
+                <a class="post" href=@postLink>
+                    @*<a class="prev" onclick="plusSlides(-1, @postInt)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1, @postInt)">&#10095;</a>*@
+                    <div class="postimages">
+                        <img class="PostListingImage" src=@Url.Content(post.ImagePaths[0]) alt="Alternate Text" />
+                    </div>
+                    @{ Account account = post.GetPostAccount(); }
+                    <div class="InfoOverImage">
+                        <p class="PostTitle">@post.Title by <span class="PosterName">@account.DisplayName</span></p>
+                        <img src=@Url.Content(account.ProfPicPath) class="ProfilePicOverPost" />
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="postcontainer">
+        <div class="row">
+            @foreach (Post post in ViewBag.Posts)
+            {
+                string postLink = "/" + post.PostID + "/showpost";
+                <a class="post" href=@postLink>
+                    @*<a class="prev" onclick="plusSlides(-1, @postInt)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1, @postInt)">&#10095;</a>*@
+                    <div class="postimages">
+                        <img class="PostListingImage" src=@Url.Content(post.ImagePaths[0]) alt="Alternate Text" />
+                    </div>
+                    @{ Account account = post.GetPostAccount(); }
+                    <div class="InfoOverImage">
+                        <p class="PostTitle">@post.Title by <span class="PosterName">@account.DisplayName</span></p>
+                        <img src=@Url.Content(account.ProfPicPath) class="ProfilePicOverPost" />
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@using ProjectGecko.Models
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/main.css" />
+</head>
+<body>
+    <header>
+        <a class="HomeLink" href="/">
+            <img class="Mascot" src="~/Images/SiteGraphics/GeckoSketchMascot.png" alt="Enter the Gecko" />
+            <h1 class="SiteTitle">GeckoSketch</h1>
+        </a>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+        </nav>
+    </header>
+    <div class="SideBar">
+        @{
+            Account LoggedIn = Account.GetAccount(Context.Request.Cookies["LoggedUser"]);
+            if (LoggedIn != null)
+            {
+                string accLink = "/" + LoggedIn.AccountID + "/account";
+                <a class="UserDetails" href=@accLink>
+                    <img src=@Url.Content(LoggedIn.ProfPicPath) alt="Alternate Text" class="ProfilePicSmall" />
+                    <p class="ProfileNameSmall">@LoggedIn.DisplayName</p>
+                </a>
+                @Html.ActionLink("Search", "Search", "Home", null, new { @class = "navButton", @id = "SearchButton" })
+                string postLink = "/" + LoggedIn.AccountID + "/NewPost";
+                <a class="navButton" href=@postLink>New Post</a>
+            }
+            else
+            {
+                @Html.ActionLink("Login/SignUp", "LogInSignUp", "Home", null, new { @class = "navButton", @id = "LogInButton" })
+                @Html.ActionLink("Search", "Search", "Home", null, new { @class = "navButton", @id = "SearchButton" })
+            }
+        }
+    </div>
+    <div class="container">
+        @RenderBody()
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+
+        </div>
+    </footer>
+</body>
+</html>

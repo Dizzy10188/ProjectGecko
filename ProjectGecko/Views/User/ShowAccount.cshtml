@@ -1,0 +1,62 @@
+﻿@using ProjectGecko
+@using ProjectGecko.Models
+@model Account
+
+@{
+    ViewData["Title"] = "ShowAccount";
+    Layout = "~/Views/Layouts/_Layout.cshtml";
+    Account LoggedIn = Account.GetAccount(Context.Request.Cookies["LoggedUser"]);
+}
+
+<section>
+    <img src="@Url.Content(Model.ProfPicPath)" class="ProfilePicSmall" />
+    <div class="UserDetails">
+        <p class="BigAccountName">@Model.DisplayName</p>
+    </div>
+
+</section>
+<section>
+    @if (String.IsNullOrWhiteSpace(Model.Biography))
+    {
+        <p class="userBio">My bio is empty :(</p>
+    }
+    <p class="userBio">@Model.Biography</p>
+</section>
+<section class="userSpecificButtons">
+    @{ if (LoggedIn != null)
+        {
+            if (LoggedIn.AccountID == Model.AccountID)
+            {
+                string comLink = "/" + Model.AccountID + "/commissions";
+                <a class="navButton" href=@comLink>User's Commissions</a>
+                string editLink = "/" + Model.AccountID + "/edit";
+                <a class="navButton" href=@editLink>Edit Profile</a>
+            }
+            else if (LoggedIn.AccountID != Model.AccountID && Model.AllowCommissions == "Yes")
+            {
+                string reqCom = "/request?CommissioneeId=" + Model.AccountID;
+                <a class="navButton" href=@reqCom>Request Commission</a>
+            }
+        }
+    }
+</section>
+
+<h1 class="userPostsHeader">@Model.DisplayName's Posts</h1>
+<div class="row showAccountGallery">
+    @foreach (Post post in ViewBag.Posts)
+    {
+        string postLink = "/" + post.PostID + "/ShowPost";
+        <a class="post" href="@postLink">
+            @*<a class="prev" onclick="plusSlides(-1, @postInt)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1, @postInt)">&#10095;</a>*@
+            <div class="postimages">
+                <img class="PostListingImage" src=@Url.Content(post.ImagePaths[0]) alt="Alternate Text" />
+            </div>
+            @{ Account account = post.GetPostAccount(); }
+            <div class="InfoOverImage">
+                <p class="PostTitle">@post.Title by <span class="PosterName">@account.DisplayName</span></p>
+                <img src=@Url.Content(account.ProfPicPath) class="ProfilePicOverPost" />
+            </div>
+        </a>
+    }
+</div>
